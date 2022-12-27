@@ -7,10 +7,14 @@ help: ## Display this help message
 	| sort \
 	| awk 'BEGIN {FS = ":.*?## "}; {printf "make \033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+${HOME}/.local:
+	mkdir -p $<
+
 doom: ## Install doom emacs config
-	git clone --depth 1 https://github.com/doomemacs/doomemacs ${HOME}/.emacs.d
+	test -d ${HOME}/.emacs.d/ \
+	|| git clone --depth 1 https://github.com/doomemacs/doomemacs ${HOME}/.emacs.d
 	${HOME}/.emacs.d/bin/doom install
-	mkdir ${HOME}/.doom.d
+	mkdir -p ${HOME}/.doom.d
 	ln -vsf {${PWD},${HOME}}/.doom.d/config.el
 	ln -vsf {${PWD},${HOME}}/.doom.d/custom.el
 	ln -vsf {${PWD},${HOME}}/.doom.d/init.el
